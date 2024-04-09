@@ -1,30 +1,44 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <section>
+    <label>Kelvin</label>
+    <input type="number" :value="round(kelvin)" @input="kelvin = parse($event.target.value)">
+    <label>Celsius</label>
+    <input type="number" :value="round(celsius)" @input="celsius = parse($event.target.value)">
+    <label>Fahrenheit</label>
+    <input type="number" :value="round(fahrenheit)" @input="fahrenheit = parse($event.target.value)">
+  </section>
 </template>
 
+<script setup>
+import { ref, computed } from 'vue';
+
+const kelvin = ref('');
+const round = (val) => (val === '') ? '' : parseFloat(val.toFixed(2)).toString();
+const parse = (val) => (val === '') ? '' : parseFloat(val);
+
+const celsius = computed({
+  get: () => (kelvin.value === '') ? '' : kelvin.value - 273.15,
+  set: (c) => { kelvin.value = (c === '') ? '' : c + 273.15; }
+});
+
+const fahrenheit = computed({
+  get: () => (kelvin.value === '') ? '' : kelvin.value * 1.8 - 459.67,
+  set: (f) => { kelvin.value = (f === '') ? '' : (f + 459.67) / 1.8; }
+});
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+section {
+  margin: 2rem;
+  display: grid;
+  gap: 1rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+input, label {
+  font-size: 1.5rem;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+input {
+  height: 2rem;
+  width: 100%;
+  max-width: 18rem;
 }
 </style>
