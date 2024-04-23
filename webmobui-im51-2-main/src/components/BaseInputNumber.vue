@@ -1,8 +1,14 @@
 <script setup>
   import { round } from '../utils/math.js';
+
+  defineOptions({
+    inheritAttrs: false
+  })
+
+
   const props = defineProps({
     unit: {
-      type: String,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
@@ -16,14 +22,18 @@
   const model = defineModel({
     get() {
       return round(props.modelValue, props.decimalPlaces);
-    }
+    },
   });
 </script>
 
 <template>
   <div>
-    <input type="number" v-model="model" v-bind="$attrs">
-    <span v-if="unit">{{ unit }}</span>
+    <input
+      v-model="model"
+      type="number"
+      v-bind="$attrs"
+    >
+    <span> {{ unit }}</span>
   </div>
 </template>
 
